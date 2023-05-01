@@ -2,7 +2,7 @@ import { useState } from 'react';
 import css from './ContactForm.module.css';
 
 const ContactForm = ({ createUser }) => {
-  const [contacts, setContacts] = useState([]);
+  // const [contacts, setContacts] = useState([]);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
