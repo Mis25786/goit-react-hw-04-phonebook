@@ -18,25 +18,17 @@ export const App = () => {
   const [filter, setFilter] = useState('');
 
   const deleteContact = contactId => {
-    setContacts(contacts.filter(contact => contact.id !== contactId));
+    setContacts(prevContacts =>
+      prevContacts.filter(contact => contact.id !== contactId)
+    );
   };
 
   const createUser = data => {
-    setContacts(prevState => {
-      if (prevState.find(contact => contact.name === data.name)) {
-        return Notify.info('This name already exists in the list');
-      }
-      return [...prevState, { ...data, id: nanoid() }];
-    });
+    if (contacts.find(contact => contact.name === data.name)) {
+      return Notify.info('This name already exists in the list');
+    }
+    setContacts(prevContacts => [...prevContacts, { ...data, id: nanoid() }]);
   };
-  // const createUser = data => {
-  //   this.setState(prevState => {
-  //     if (prevState.contacts.find(contact => contact.name === data.name)) {
-  //       return Notify.info('This name already exists in the list');
-  //     }
-  //     return { contacts: [...prevState.contacts, { ...data, id: nanoid() }] };
-  //   });
-  // };
 
   const cangeFilter = e => {
     setFilter(e.target.value);
@@ -54,9 +46,9 @@ export const App = () => {
   };
 
   useEffect(() => {
-    const contactsLS = localStorage.getItem('contacts');
-    console.log('contactsLS :>> ', contactsLS);
-    const parsedContacts = JSON.parse(contactsLS);
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    console.log('contacts :>> ', contacts);
     console.log('parsedContacts :>> ', parsedContacts);
 
     if (parsedContacts) {
@@ -65,9 +57,7 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log('contacts :>> ', contacts);
-    contacts.length &&
-      localStorage.setItem('contacts', JSON.stringify(contacts));
+    localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
   return (
